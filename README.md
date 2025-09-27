@@ -31,3 +31,15 @@ npm i --save-dev electron-builder
 ```bash
 cnpm i --save-dev electron-builder
 ``` -->
+
+4. Install cross-env
+
+```bash
+npm i --save-dev cross-env
+```
+
+5. Install npm-run-all to run multiple commands in parallel
+
+```bash
+npm i --save-dev npm-run-all
+```
