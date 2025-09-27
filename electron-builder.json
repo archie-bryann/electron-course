@@ -1,6 +1,7 @@
 {
     "appId": "com.ekomobong.electonCourse",
     "files": ["dist-electron", "dist-react"],
+    "extraResources": ["dist-electron/preload.cjs"],
     "icon": "./desktopIcon.ico",
     "mac": {
         "target": "dmg"
