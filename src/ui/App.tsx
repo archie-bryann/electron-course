@@ -1,12 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0);
+  const [stats, setStats] = useState({} as any);
 
-  // @ts-ignores
-  window.electron.getStaticData();
+  // @ts-ignore
+  // window.electron.getStaticData();
+
+  useEffect(() => {
+    window.electron.subscribeStatistics((stats) => {
+      setStats(stats);
+      return {}; // Return empty object to satisfy the type requirement
+    })
+  }, [])
 
   return (
     <>
