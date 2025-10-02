@@ -10,10 +10,15 @@ function App() {
   // window.electron.getStaticData();
 
   useEffect(() => {
-    window.electron.subscribeStatistics((stats) => {
-      setStats(stats);
-      return {}; // Return empty object to satisfy the type requirement
+    // window.electron.subscribeStatistics((stats) => {
+    //   setStats(stats);
+    //   return {}; // Return empty object to satisfy the type requirement
+    // })
+
+    const unsub = window.electron.subscribeStatistics((stats) => {
+      console.log(stats)
     })
+    return unsub;
   }, [])
 
   return (

@@ -43,3 +43,5 @@ npm i --save-dev cross-env
 ```bash
 npm i --save-dev npm-run-all
 ```
+
+2:16:21
