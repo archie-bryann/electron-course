@@ -3,6 +3,8 @@ import path from "path";
 import { ipcMainHandle, isDev } from "./util.js";
 import { getStaticData, pollResources } from "./resourceManager.js";
 import { getAssetPath, getPreloadPath } from "./pathResolver.js";
+import { createTray } from "./tray.js";
+import { createMenu } from "./menu.js";
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
@@ -30,16 +32,40 @@ app.on("ready", () => {
     return getStaticData();
   });
 
-  new Tray(path.join(getAssetPath(), "trayIcon.png"));
+  createTray(mainWindow);
+  createMenu(mainWindow);
+
+  // new Tray(path.join(getAssetPath(), "trayIcon.png"));
   // to use template icon for dark mode in macOS
   // new Tray(path.join(getAssetPath(), process.platform === "darwin" ? "trayIconTemplate.png" : "trayIcon.png"));
 
-  // close window warning
-  mainWindow.on("close", (e) => {
-    e.preventDefault();
-  });
+  handleCloseEvents(mainWindow);
+
 });
 
 // function handleGetStaticData(callback: () => StaticData) {
 //   ipcMain.handle('getStaticData', callback);
 // }
+
+function handleCloseEvents(mainWindow: BrowserWindow) {
+  let willClose = false;
+
+  mainWindow.on("close", (e) => {
+    if (willClose) {
+      return;
+    }
+    e.preventDefault();
+    mainWindow.hide();
+    if(app.dock) { // macOS (uses dock)
+      app.dock.hide();
+    }
+  });
+
+  app.on("before-quit", () => {
+    willClose = true;
+  });
+
+  mainWindow.on("show", () => {
+    willClose = false;
+  });
+}
