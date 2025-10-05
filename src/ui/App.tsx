@@ -15,10 +15,17 @@ function App() {
     //   return {}; // Return empty object to satisfy the type requirement
     // })
 
-    const unsub = window.electron.subscribeStatistics((stats) => {
+    const unsubStats = window.electron.subscribeStatistics((stats) => {
       console.log(stats)
     })
-    return unsub;
+
+    const unsubView = window.electron.subscribeChangeView((view) => console.log(view));
+
+    return () => {
+      unsubStats();
+      unsubView();
+    }
+
   }, [])
 
   return (
