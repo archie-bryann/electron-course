@@ -44,4 +44,22 @@ npm i --save-dev cross-env
 npm i --save-dev npm-run-all
 ```
 
+6.
+
+Make app draggable with the element when `frame` is set to `false` in `main.ts`
+
+```css
+header {
+  -webkit-app-region: drag;
+}
+```
+
+Make element undraggable
+
+```css
+header button {
+  -webkit-app-region: no-drag;
+}
+```
+
 2:16:21
