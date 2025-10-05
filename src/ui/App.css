@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+/* only works with frame set to false in main.ts */
+
+header {
+  -webkit-app-region: drag;
+}
+
+header button {
+  -webkit-app-region: no-drag;
+}

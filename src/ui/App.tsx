@@ -30,6 +30,13 @@ function App() {
 
   return (
     <>
+    <header>
+      <button id = "close"
+      onClick = {() => window.electron.sendFrameAction("CLOSE")}
+      >Close</button> &nbsp;
+      <button id = "minimize" onClick = {() => window.electron.sendFrameAction("MINIMIZE")}>Minimize</button> &nbsp;
+      <button id = "maximize" onClick = {() => window.electron.sendFrameAction("MAXIMIZE")}>Maximize</button>
+    </header>
       <div>
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />

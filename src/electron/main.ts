@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron";
 import path from "path";
-import { ipcMainHandle, isDev } from "./util.js";
+import { ipcMainHandle, ipcMainOn, isDev } from "./util.js";
 import { getStaticData, pollResources } from "./resourceManager.js";
 import { getAssetPath, getPreloadPath } from "./pathResolver.js";
 import { createTray } from "./tray.js";
@@ -11,9 +11,9 @@ import { createMenu } from "./menu.js";
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
     webPreferences: {
-      preload: getPreloadPath()
+      preload: getPreloadPath(),
     },
-    frame: false,
+    // frame: false,
   });
   if (isDev()) {
     mainWindow.loadURL("http://localhost:5123");
@@ -31,8 +31,26 @@ app.on("ready", () => {
   //   return getStaticData();
   // });
 
-  ipcMainHandle('getStaticData', () => {
+  ipcMainHandle("getStaticData", () => {
     return getStaticData();
+  });
+
+  ipcMainOn("sendFrameAction", (payload) => {
+    switch (payload) {
+      case "CLOSE":
+        mainWindow.close();
+        break;
+      case "MINIMIZE":
+        mainWindow.minimize();
+        break;
+      case "MAXIMIZE":
+        if (mainWindow.isMaximized()) {
+          mainWindow.unmaximize();
+        } else {
+          mainWindow.maximize();
+        }
+        break;
+    }
   });
 
   createTray(mainWindow);
@@ -43,7 +61,6 @@ app.on("ready", () => {
   // new Tray(path.join(getAssetPath(), process.platform === "darwin" ? "trayIconTemplate.png" : "trayIcon.png"));
 
   handleCloseEvents(mainWindow);
-
 });
 
 // function handleGetStaticData(callback: () => StaticData) {
@@ -59,7 +76,8 @@ function handleCloseEvents(mainWindow: BrowserWindow) {
     }
     e.preventDefault();
     mainWindow.hide();
-    if(app.dock) { // macOS (uses dock)
+    if (app.dock) {
+      // macOS (uses dock)
       app.dock.hide();
     }
   });
